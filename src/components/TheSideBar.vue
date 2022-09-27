@@ -63,10 +63,10 @@ export default {
   components: { Button },
   computed: {
     ...mapState(useAppStore, {
-      emailList: "emailList",
+      inboxList: "inboxList",
     }),
     getAllInbox() {
-      return this.emailList.length;
+      return this.inboxList.length;
     },
     getAllArchives() {
       return "0";

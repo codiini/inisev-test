@@ -5,7 +5,7 @@ export const useAppStore = defineStore("appStore", {
   state: () => ({
     isMailDrawerOpen: false,
     mailIndex: null,
-    emailList: [
+    inboxList: [
       {
         index: 0,
         selected: false,
@@ -35,6 +35,7 @@ export const useAppStore = defineStore("appStore", {
         isArchived: false,
       },
     ],
+    archiveList: [],
   }),
   getters: {
     getMailDrawerState: (state) => state.isMailDrawerOpen,

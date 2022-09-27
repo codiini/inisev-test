@@ -91,7 +91,7 @@ export default {
   methods: {
     ...mapActions(useAppStore, ["toggleMailDrawerState"]),
     markMailAsRead() {
-      this.emailList[this.mailIndex].isRead = true;
+      this.inboxList[this.mailIndex].isRead = true;
     },
     closeModal(e) {
       if (e.keyCode === 27) {
@@ -109,7 +109,7 @@ export default {
   },
   computed: {
     ...mapState(useAppStore, {
-      emailList: "emailList",
+      inboxList: "inboxList",
       mailIndex: "mailIndex",
     }),
   },

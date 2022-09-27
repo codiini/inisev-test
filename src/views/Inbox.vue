@@ -23,13 +23,13 @@ import Button from "../components/Button.vue";
 
       <div class="email-list-container">
         <EmailItem
-          v-for="{ text, index } in emailList"
-          @toggle="(e) => (emailList[index].selected = e)"
+          v-for="{ text, index } in inboxList"
+          @toggle="(e) => (inboxList[index].selected = e)"
           :key="index"
-          :selectedStatus="emailList[index].selected"
-          v-model="emailList[index].selected"
+          :selectedStatus="inboxList[index].selected"
+          v-model="inboxList[index].selected"
           :text="text"
-          :markedAsRead="emailList[index].isRead"
+          :markedAsRead="inboxList[index].isRead"
           @click.stop.prevent="toggleMailDrawerState(true, index)"
         ></EmailItem>
       </div>
@@ -44,18 +44,17 @@ export default {
   data() {
     return {
       globalSelect: false,
-      selectedCount: "3",
     };
   },
   methods: {
     ...mapActions(useAppStore, ["toggleMailDrawerState"]),
     selectAllItems() {
-      this.emailList.map((e) => {
+      this.inboxList.map((e) => {
         e.selected = !this.globalSelect;
       });
     },
     markMailsAsRead() {
-      const list = this.emailList.filter((e) => {
+      const list = this.inboxList.filter((e) => {
         return e.selected == true;
       });
       list.forEach((e) => {
@@ -63,7 +62,7 @@ export default {
       });
     },
     archiveMail() {
-      const list = this.emailList.filter((e) => {
+      const list = this.inboxList.filter((e) => {
         return e.selected == true;
       });
       list.forEach((e) => {
@@ -81,10 +80,10 @@ export default {
   },
   computed: {
     ...mapState(useAppStore, {
-      emailList: "emailList",
+      inboxList: "inboxList",
     }),
     getselectedEmails() {
-      const list = this.emailList.filter((e) => {
+      const list = this.inboxList.filter((e) => {
         return e.selected == true;
       });
       return list.length;

@@ -23,11 +23,11 @@ import Button from "../components/Button.vue";
 
       <div class="email-list-container">
         <EmailItem
-          v-for="{ text, index } in emailList"
-          @toggle="(e) => (emailList[index].selected = e)"
+          v-for="{ text, index } in inboxList"
+          @toggle="(e) => (inboxList[index].selected = e)"
           :key="index"
-          :selectedStatus="emailList[index].selected"
-          v-model="emailList[index].selected"
+          :selectedStatus="inboxList[index].selected"
+          v-model="inboxList[index].selected"
           :text="text"
           :markedAsRead="false"
         ></EmailItem>
@@ -42,7 +42,7 @@ export default {
     return {
       globalSelect: false,
       selectedCount: "3",
-      emailList: [
+      inboxList: [
         {
           index: 0,
           selected: false,
@@ -68,14 +68,14 @@ export default {
   },
   methods: {
     selectAllItems() {
-      this.emailList.map((e) => {
+      this.inboxList.map((e) => {
         e.selected = !this.globalSelect;
       });
     },
   },
   computed: {
     getselectedEmails() {
-      const list = this.emailList.filter((e) => {
+      const list = this.inboxList.filter((e) => {
         return e.selected == true;
       });
       return list.length;
