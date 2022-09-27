@@ -33,7 +33,9 @@ export default {
       ></RouterView>
       <RouterView class="app__container-views__second"> </RouterView>
     </div>
-    <TheMailDrawer v-show="drawerState"></TheMailDrawer>
+    <Transition name="slide">
+      <TheMailDrawer v-show="drawerState"></TheMailDrawer>
+    </Transition>
     <div
       :class="{ 'drawer-overlay--drawer-open': drawerState }"
       class="drawer-overlay"
@@ -71,5 +73,16 @@ export default {
   &--drawer-open {
     display: block;
   }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.2s ease;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateX(100%);
+  transition: all 150ms ease-in 0s;
 }
 </style>
