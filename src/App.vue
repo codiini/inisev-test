@@ -9,6 +9,14 @@ export default {
     ...mapState(useAppStore, {
       drawerState: "isMailDrawerOpen",
     }),
+    getRouteName() {
+      return this.$route.name;
+    },
+  },
+  watch: {
+    $route: {
+      deep: true,
+    },
   },
 };
 </script>
@@ -17,7 +25,7 @@ export default {
   <div class="app">
     <div class="app__container-views">
       <div class="app__container-views__text">
-        <h1>{{ $route.name }}</h1>
+        <h1>{{ getRouteName }}</h1>
       </div>
       <RouterView
         class="app__container-views__first"

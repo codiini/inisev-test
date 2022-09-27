@@ -70,6 +70,14 @@ export default {
         e.isArchived = true;
       });
     },
+    keyCommands(e) {
+      if (e.key == "a") {
+        this.archiveMail();
+      }
+      if (e.key == "r") {
+        this.markMailsAsRead();
+      }
+    },
   },
   computed: {
     ...mapState(useAppStore, {
@@ -83,17 +91,10 @@ export default {
     },
   },
   created() {
-    window.addEventListener("keydown", (e) => {
-      if (e.key == "a") {
-        this.archiveMail();
-      }
-      if (e.key == "r") {
-        this.markMailsAsRead();
-      }
-    });
+    window.addEventListener("keydown", this.keyCommands);
   },
   unmounted() {
-    window.removeEventListener("keydown");
+    window.removeEventListener("keydown", this.keyCommands);
   },
 };
 </script>
