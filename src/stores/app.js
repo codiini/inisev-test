@@ -40,8 +40,8 @@ export const useAppStore = defineStore("appStore", {
     getMailDrawerState: (state) => state.isMailDrawerOpen,
   },
   actions: {
-    toggleMailDrawerState(index) {
-      this.isMailDrawerOpen = !this.isMailDrawerOpen;
+    toggleMailDrawerState(state, index) {
+      this.isMailDrawerOpen = state;
       this.mailIndex = index;
     },
   },

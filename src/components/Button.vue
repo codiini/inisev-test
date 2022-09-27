@@ -2,7 +2,7 @@
   <component
     :is="route ? 'router-link' : 'button'"
     :to="route && route.startsWith('/') ? route : ''"
-    @click="click"
+    @click.stop.prevent="click"
     class="button"
   >
     <span class="button__text" data-button-text>

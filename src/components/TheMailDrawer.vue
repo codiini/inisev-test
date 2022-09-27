@@ -3,7 +3,7 @@
     <div class="sidebar-container__wrapper">
       <div class="sidebar-container__wrapper__first">
         <div
-          @click="toggleMailDrawerState()"
+          @click="toggleMailDrawerState(false, null)"
           class="sidebar-container__wrapper__first__close-text"
         >
           Close (Esc)
@@ -93,19 +93,19 @@ export default {
     markMailAsRead() {
       this.emailList[this.mailIndex].isRead = true;
     },
-    // checkForOutsideClick(e) {
-    //   const el = document.getElementById("box");
-    //   if (document.getElementById("box").contains(e.target)) {
-    //      e.stopPropagation()
-    //     console.log("Not it");
-    //     // this.toggleMailDrawerState();
-    //   } else {
-    //     console.log("This is it");
-    //     this.toggleMailDrawerState();
-    //   }
-
-    //   //  window.removeEventListener("click", this.checkForOutsideClick);
-    // },
+    closeModal(e) {
+      if (e.keyCode === 27) {
+        this.toggleMailDrawerState(false, null);
+      }
+      if (e.key == "r") {
+        this.markMailAsRead();
+      }
+    },
+    clickOutside(e) {
+      if (!document.getElementById("box").contains(e.target)) {
+        this.toggleMailDrawerState(false, null);
+      }
+    },
   },
   computed: {
     ...mapState(useAppStore, {
@@ -113,14 +113,13 @@ export default {
       mailIndex: "mailIndex",
     }),
   },
-  // created() {
-  // const el = document.getElementById("box");
-  // el.addEventListener("click", this.checkForOutsideClick);
-  // window.addEventListener("keydown", (e) => {
-  //   if (e.key == "Escape") {
-  //     this.toggleMailDrawerState;
-  //   }
-  // });
-  // },
+  created() {
+    window.addEventListener("click", this.clickOutside);
+    window.addEventListener("keydown", this.closeModal);
+  },
+  unmounted() {
+    window.removeEventListener("click", this.clickOutside);
+    window.removeEventListener("keydown", this.closeModal);
+  },
 };
 </script>

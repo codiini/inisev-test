@@ -30,7 +30,7 @@ import Button from "../components/Button.vue";
           v-model="emailList[index].selected"
           :text="text"
           :markedAsRead="emailList[index].isRead"
-          @click="toggleMailDrawerState(index)"
+          @click.stop.prevent="toggleMailDrawerState(true, index)"
         ></EmailItem>
       </div>
     </div>
