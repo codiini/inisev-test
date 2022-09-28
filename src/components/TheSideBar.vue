@@ -2,11 +2,13 @@
   <aside class="sidebar-container">
     <div class="sidebar-container__wrapper">
       <div class="sidebar-container__wrapper__first">
-        <Button route="/inbox" :count="getAllInbox">Inbox</Button>
-        <Button route="/archive" :count="getAllArchives">Archive</Button>
+        <BaseButton route="/inbox" :count="getAllInbox">Inbox</BaseButton>
+        <BaseButton route="/archive" :count="getAllArchives"
+          >Archive</BaseButton
+        >
       </div>
       <div class="sidebar-container__wrapper__second">
-        <Button>Logout</Button>
+        <BaseButton>Logout</BaseButton>
       </div>
     </div>
   </aside>
@@ -55,21 +57,22 @@
 </style>
 
 <script>
-import Button from "./Button.vue";
 import { mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
+import BaseButton from "./BaseButton.vue";
 
 export default {
-  components: { Button },
+  components: { BaseButton },
   computed: {
     ...mapState(useAppStore, {
       inboxList: "inboxList",
+      archiveList: "archiveList",
     }),
     getAllInbox() {
-      return this.inboxList.length;
+      return this.inboxList.length > 0 ? this.inboxList.length : "0";
     },
     getAllArchives() {
-      return "0";
+      return this.archiveList.length > 0 ? this.archiveList.length : "0";
     },
   },
 };

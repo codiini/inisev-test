@@ -1,12 +1,7 @@
-<script setup>
-import EmailItem from "../components/EmailItem.vue";
-import Button from "../components/Button.vue";
-</script>
-
 <template>
   <main class="inbox-container">
     <div class="inbox-container__wrapper">
-      <h2>Emails Selected ({{ getselectedEmails }})</h2>
+      <h2>Emails Selected ({{ getInboxCount }})</h2>
 
       <div class="control-menu">
         <div class="control-menu__checkbox-container">
@@ -17,57 +12,62 @@ import Button from "../components/Button.vue";
           />
         </div>
 
-        <Button @click="markMailsAsRead" count="r">Mark as read</Button>
-        <Button @click="archiveMail" count="a">Archive</Button>
+        <BaseButton @click="markMailsAsRead" count="r">Mark as read</BaseButton>
+        <BaseButton @click="archiveMail" count="a">Archive</BaseButton>
       </div>
 
       <div class="email-list-container">
-        <EmailItem
-          v-for="{ text, index } in inboxList"
-          @toggle="(e) => (inboxList[index].selected = e)"
-          :key="index"
-          :selectedStatus="inboxList[index].selected"
-          v-model="inboxList[index].selected"
-          :text="text"
-          :markedAsRead="inboxList[index].isRead"
-          @click.stop.prevent="toggleMailDrawerState(true, index)"
-        ></EmailItem>
+        <template v-for="{ text, index } in inboxList" :key="index">
+          <EmailItem
+            @toggle="(e) => (inboxList[index].selected = e)"
+            :selectedStatus="inboxList[index].selected"
+            v-model="inboxList[index].selected"
+            :text="text"
+            :markedAsRead="inboxList[index].isRead"
+            @click.stop.prevent="toggleMailDrawerState(true, index)"
+          ></EmailItem>
+        </template>
       </div>
     </div>
   </main>
 </template>
 
 <script>
+import EmailItem from "../components/EmailItem.vue";
+import BaseButton from "../components/BaseButton.vue";
 import { mapState, mapActions } from "pinia";
 import { useAppStore } from "@/stores/app";
 export default {
+  components: {
+    EmailItem,
+    BaseButton,
+  },
   data() {
     return {
       globalSelect: false,
     };
   },
   methods: {
-    ...mapActions(useAppStore, ["toggleMailDrawerState"]),
+    ...mapActions(useAppStore, ["toggleMailDrawerState", "markMailsAsRead"]),
     selectAllItems() {
       this.inboxList.map((e) => {
         e.selected = !this.globalSelect;
       });
     },
-    markMailsAsRead() {
-      const list = this.inboxList.filter((e) => {
-        return e.selected == true;
-      });
-      list.forEach((e) => {
-        e.isRead = true;
-      });
-    },
     archiveMail() {
+      let indexes = [];
       const list = this.inboxList.filter((e) => {
-        return e.selected == true;
+        return e.selected === true;
       });
-      list.forEach((e) => {
+      const archivedList = list.map((e) => {
         e.isArchived = true;
+        indexes.push(e.index);
+        return e;
       });
+      for (let i = archivedList.length - 1; i >= 0; i--) {
+        this.archiveList.push(archivedList[i]);
+        this.inboxList.splice(archivedList.indexOf(indexes[i]), 1);
+      }
     },
     keyCommands(e) {
       if (e.key == "a") {
@@ -81,8 +81,9 @@ export default {
   computed: {
     ...mapState(useAppStore, {
       inboxList: "inboxList",
+      archiveList: "archiveList",
     }),
-    getselectedEmails() {
+    getInboxCount() {
       const list = this.inboxList.filter((e) => {
         return e.selected == true;
       });
@@ -114,7 +115,7 @@ export default {
       font-weight: 700;
     }
     .control-menu {
-      width: 50%;
+      width: 60%;
       display: flex;
       justify-content: space-evenly;
       margin-top: 50px;
@@ -136,6 +137,7 @@ export default {
       max-width: 800px;
       width: 100%;
       margin-top: 20px;
+      padding-bottom: 50px;
       & > div {
         margin-top: 20px;
       }

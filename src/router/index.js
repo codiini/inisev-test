@@ -20,14 +20,6 @@ const router = createRouter({
       },
     },
     {
-      path: "/email/:id",
-      name: "single-email",
-      components: {
-        default: () => import("../views/SingleEmail.vue"),
-        SideBar: () => import("../components/TheSideBar.vue"),
-      },
-    },
-    {
       path: "/archive",
       name: "Archive",
       components: {

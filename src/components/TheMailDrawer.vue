@@ -9,8 +9,10 @@
           Close (Esc)
         </div>
         <div class="sidebar-container__wrapper__first__button-list">
-          <Button @click="markMailAsRead()" count="r">Mark as read</Button>
-          <Button count="a">Archive</Button>
+          <BaseButton @click="markMailAsRead()" count="r"
+            >Mark as read</BaseButton
+          >
+          <BaseButton count="a">Archive</BaseButton>
         </div>
       </div>
       <div class="sidebar-container__wrapper__second">
@@ -82,12 +84,12 @@
 </style>
 
 <script>
-import Button from "./Button.vue";
 import { mapActions, mapState } from "pinia";
 import { useAppStore } from "@/stores/app";
+import BaseButton from "./BaseButton.vue";
 
 export default {
-  components: { Button },
+  components: { BaseButton },
   methods: {
     ...mapActions(useAppStore, ["toggleMailDrawerState"]),
     markMailAsRead() {

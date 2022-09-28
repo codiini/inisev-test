@@ -2,7 +2,7 @@
   <component
     :is="route ? 'router-link' : 'button'"
     :to="route && route.startsWith('/') ? route : ''"
-    @click.stop.prevent="click"
+    @click.stop.prevent="click($event)"
     class="button"
   >
     <span class="button__text" data-button-text>
@@ -25,7 +25,8 @@ export default {
     },
   },
   methods: {
-    click() {
+    click(e) {
+      e.stopImmediatePropagation();
       this.$emit("click");
     },
   },

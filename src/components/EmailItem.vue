@@ -2,7 +2,7 @@
   <div class="item" :class="{ 'item--is-read': markedAsRead }">
     <div class="item__container">
       <input
-        v-model="selectedStatus"
+        v-model="checkedStatus"
         @click.stop="toggleSelect"
         :disabled="markedAsRead"
         type="checkbox"
@@ -14,9 +14,6 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
   props: {
     text: {
       type: String,
@@ -30,14 +27,19 @@ export default {
       type: Boolean,
     },
   },
-  watch: {
-    selectedStatus(value) {
-      this.checked = value;
-    },
-  },
   methods: {
     toggleSelect() {
       this.$emit("toggle", !this.checked);
+    },
+  },
+  computed: {
+    checkedStatus: {
+      get() {
+        return this.selectedStatus;
+      },
+      set(value) {
+        this.$emit("update", value);
+      },
     },
   },
 };

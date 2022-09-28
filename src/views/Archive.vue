@@ -1,8 +1,3 @@
-<script setup>
-import EmailItem from "../components/EmailItem.vue";
-import Button from "../components/Button.vue";
-</script>
-
 <template>
   <main class="home-container">
     <div class="home-container__wrapper">
@@ -17,19 +12,19 @@ import Button from "../components/Button.vue";
           />
         </div>
 
-        <Button count="r">Mark as read</Button>
-        <Button count="a">Archive</Button>
+        <BaseButton @click="markMailsAsRead" count="r">Mark as read</BaseButton>
+        <!-- <BaseButton count="a">Archive</BaseButton> -->
       </div>
 
       <div class="email-list-container">
         <EmailItem
-          v-for="{ text, index } in inboxList"
-          @toggle="(e) => (inboxList[index].selected = e)"
+          v-for="{ text, index } in archiveList"
+          @toggle="(e) => (archiveList[index].selected = e)"
           :key="index"
-          :selectedStatus="inboxList[index].selected"
-          v-model="inboxList[index].selected"
+          :selectedStatus="archiveList[index].selected"
+          v-model="archiveList[index].selected"
           :text="text"
-          :markedAsRead="false"
+          :markedAsRead="archiveList[index].isRead"
         ></EmailItem>
       </div>
     </div>
@@ -37,45 +32,35 @@ import Button from "../components/Button.vue";
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import { useAppStore } from "@/stores/app";
+import EmailItem from "../components/EmailItem.vue";
+import BaseButton from "../components/BaseButton.vue";
 export default {
+  components: {
+    EmailItem,
+    BaseButton,
+  },
   data() {
     return {
       globalSelect: false,
       selectedCount: "3",
-      inboxList: [
-        {
-          index: 0,
-          selected: false,
-          text: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, reiciendis.",
-        },
-        {
-          index: 1,
-          selected: false,
-          text: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, reiciendis.",
-        },
-        {
-          index: 2,
-          selected: false,
-          text: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, reiciendis.",
-        },
-        {
-          index: 3,
-          selected: false,
-          text: " Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, reiciendis.",
-        },
-      ],
     };
   },
   methods: {
+    ...mapActions(useAppStore, ["markMailsAsRead"]),
     selectAllItems() {
-      this.inboxList.map((e) => {
+      this.archiveList.map((e) => {
         e.selected = !this.globalSelect;
       });
     },
   },
   computed: {
+    ...mapState(useAppStore, {
+      archiveList: "archiveList",
+    }),
     getselectedEmails() {
-      const list = this.inboxList.filter((e) => {
+      const list = this.archiveList.filter((e) => {
         return e.selected == true;
       });
       return list.length;
@@ -100,7 +85,7 @@ export default {
       font-weight: 700;
     }
     .control-menu {
-      width: 50%;
+      width: 40%;
       display: flex;
       justify-content: space-evenly;
       margin-top: 50px;
