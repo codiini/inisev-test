@@ -102,17 +102,28 @@ export default {
       if (e.key == "r") {
         this.markMailAsRead();
       }
+      if (e.key == "a") {
+        this.archiveMail();
+      }
     },
     clickOutside(e) {
       if (!document.getElementById("box").contains(e.target)) {
         this.toggleMailDrawerState(false, null);
       }
     },
+    archiveMail() {
+      this.inboxList[this.mailIndex].isArchived = true;
+      const removedItem = this.inboxList.splice(this.mailIndex, 1);
+      const archivedItem = this.archiveList.push(...removedItem);
+      this.archiveList[archivedItem - 1].selected = false;
+      this.toggleMailDrawerState(false, null);
+    },
   },
   computed: {
     ...mapState(useAppStore, {
       inboxList: "inboxList",
       mailIndex: "mailIndex",
+      archiveList: "archiveList",
     }),
   },
   created() {

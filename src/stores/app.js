@@ -53,5 +53,20 @@ export const useAppStore = defineStore("appStore", {
         e.isRead = true;
       });
     },
+    archiveMail() {
+      let indexes = [];
+      const list = this.inboxList.filter((e) => {
+        return e.selected === true;
+      });
+      list.map((e) => {
+        e.isArchived = true;
+        indexes.push(e.index);
+      });
+      for (var i = indexes.length - 1; i >= 0; i--) {
+        const removedItem = this.inboxList.splice(indexes[i], 1);
+        const archivedItem = this.archiveList.push(...removedItem);
+        this.archiveList[archivedItem - 1].selected = false;
+      }
+    },
   },
 });

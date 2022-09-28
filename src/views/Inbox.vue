@@ -17,14 +17,14 @@
       </div>
 
       <div class="email-list-container">
-        <template v-for="{ text, index } in inboxList" :key="index">
+        <template v-for="({ text, index }, i) in inboxList" :key="index">
           <EmailItem
-            @toggle="(e) => (inboxList[index].selected = e)"
-            :selectedStatus="inboxList[index].selected"
-            v-model="inboxList[index].selected"
+            @toggle="(e) => (inboxList[i].selected = e)"
+            :selectedStatus="inboxList[i].selected"
+            v-model="inboxList[i].selected"
             :text="text"
-            :markedAsRead="inboxList[index].isRead"
-            @click.stop.prevent="toggleMailDrawerState(true, index)"
+            :markedAsRead="inboxList[i].isRead"
+            @click.stop.prevent="toggleMailDrawerState(true, i)"
           ></EmailItem>
         </template>
       </div>
@@ -48,26 +48,15 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAppStore, ["toggleMailDrawerState", "markMailsAsRead"]),
+    ...mapActions(useAppStore, [
+      "toggleMailDrawerState",
+      "markMailsAsRead",
+      "archiveMail",
+    ]),
     selectAllItems() {
       this.inboxList.map((e) => {
         e.selected = !this.globalSelect;
       });
-    },
-    archiveMail() {
-      let indexes = [];
-      const list = this.inboxList.filter((e) => {
-        return e.selected === true;
-      });
-      const archivedList = list.map((e) => {
-        e.isArchived = true;
-        indexes.push(e.index);
-        return e;
-      });
-      for (let i = archivedList.length - 1; i >= 0; i--) {
-        this.archiveList.push(archivedList[i]);
-        this.inboxList.splice(archivedList.indexOf(indexes[i]), 1);
-      }
     },
     keyCommands(e) {
       if (e.key == "a") {

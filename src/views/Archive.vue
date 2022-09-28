@@ -18,13 +18,13 @@
 
       <div class="email-list-container">
         <EmailItem
-          v-for="{ text, index } in archiveList"
-          @toggle="(e) => (archiveList[index].selected = e)"
+          v-for="({ text, index }, i) in archiveList"
+          @toggle="(e) => (archiveList[i].selected = e)"
           :key="index"
-          :selectedStatus="archiveList[index].selected"
-          v-model="archiveList[index].selected"
+          :selectedStatus="archiveList[i].selected"
+          v-model="archiveList[i].selected"
           :text="text"
-          :markedAsRead="archiveList[index].isRead"
+          :markedAsRead="archiveList[i].isRead"
         ></EmailItem>
       </div>
     </div>
