@@ -38,7 +38,7 @@ export default {
         return this.selectedStatus;
       },
       set(value) {
-        this.$emit("update", value);
+        this.$emit("toggle", value);
       },
     },
   },
