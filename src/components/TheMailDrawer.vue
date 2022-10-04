@@ -12,7 +12,7 @@
           <BaseButton @click="markMailAsRead()" count="r"
             >Mark as read</BaseButton
           >
-          <BaseButton count="a">Archive</BaseButton>
+          <BaseButton @click="archiveMail()" count="a">Archive</BaseButton>
         </div>
       </div>
       <div class="sidebar-container__wrapper__second">

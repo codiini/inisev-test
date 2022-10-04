@@ -53,6 +53,14 @@ export const useAppStore = defineStore("appStore", {
         e.isRead = true;
       });
     },
+    markArchivedMailsAsRead() {
+      const list = this.archiveList.filter((e) => {
+        return e.selected == true;
+      });
+      list.forEach((e) => {
+        e.isRead = true;
+      });
+    },
     archiveMail() {
       let indexes = [];
       const list = this.inboxList.filter((e) => {

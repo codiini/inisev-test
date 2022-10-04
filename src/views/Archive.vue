@@ -12,7 +12,7 @@
           />
         </div>
 
-        <BaseButton @click="markMailsAsRead" count="r">Mark as read</BaseButton>
+        <BaseButton @click="markArchivedMailsAsRead" count="r">Mark as read</BaseButton>
         <!-- <BaseButton count="a">Archive</BaseButton> -->
       </div>
 
@@ -25,6 +25,7 @@
           v-model="archiveList[i].selected"
           :text="text"
           :markedAsRead="archiveList[i].isRead"
+          @click.stop.prevent="toggleMailDrawerState(true, i)"
         ></EmailItem>
       </div>
     </div>
@@ -48,11 +49,19 @@ export default {
     };
   },
   methods: {
-    ...mapActions(useAppStore, ["markMailsAsRead"]),
+    ...mapActions(useAppStore, [
+      "markArchivedMailsAsRead",
+      "toggleMailDrawerState",
+    ]),
     selectAllItems() {
       this.archiveList.map((e) => {
         e.selected = !this.globalSelect;
       });
+    },
+    keyCommands(e) {
+      if (e.key == "r") {
+        this.markArchivedMailsAsRead();
+      }
     },
   },
   computed: {
@@ -65,6 +74,12 @@ export default {
       });
       return list.length;
     },
+  },
+  created() {
+    window.addEventListener("keydown", this.keyCommands);
+  },
+  unmounted() {
+    window.removeEventListener("keydown", this.keyCommands);
   },
 };
 </script>
